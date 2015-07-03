@@ -1,0 +1,10 @@
+{
+    "name":         "gtoolbox",
+    "url":          "https://github.com/deltaluca/nape",
+    "license":      "BSD",
+    "tags":         ["cross", "game"],
+    "description":  "Game Toolbox",
+    "version":      "1.0.0",
+    "releasenote":  "Minor improvements to memory usage in space.step(..) after pull request merge",
+    "contributors": ["aaron"]
+}
