@@ -1,9 +1,9 @@
 {
-    "name":         "gtoolbox",
+    "name":         "evsm",
     "url":          "https://github.com/deltaluca/nape",
     "license":      "BSD",
     "tags":         ["cross", "game"],
-    "description":  "Game Toolbox",
+    "description":  "EvSM - Event State Machine",
     "version":      "1.0.0",
     "releasenote":  "Minor improvements to memory usage in space.step(..) after pull request merge",
     "contributors": ["aaron"]

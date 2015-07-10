@@ -2,6 +2,7 @@
 package evsm;
 
 import haxe.ds.ObjectMap;
+import haxe.ds.StringMap;
 
 // The FState class takes two type parameters, the first is the type of the object that contains the state,
 // and the second is the type of the object that will be used as event objects.
@@ -19,7 +20,7 @@ class FState<T: (StateObject),U: (EventObject)>{
 
     //addTransition adds a basic link between two states: if an event with the given ID is recieved by this state, it
     //will transition to the one specified.
-    public function addTransition(toState:FState<T,U>,eventID:Dynamic):FState<T,U>
+    public function addTransition(toState:FState<T,U>,eventID:String):FState<T,U>
     {
         eventActions.set(eventID,toState);
         return this;
@@ -164,5 +165,5 @@ class FState<T: (StateObject),U: (EventObject)>{
     var parameters:ObjectMap<FState<T,U>,Array<Dynamic>> = new ObjectMap<FState<T,U>,Array<Dynamic>>();
     var currentParameterRef:ObjectMap<FState<T,U>,Array<Dynamic>>;
 
-    var eventActions:ObjectMap<Dynamic,FState<T,U>> = new ObjectMap<Dynamic,FState<T,U>>();
+    var eventActions:StringMap<FState<T,U>> = new StringMap<FState<T,U>>();
 }
