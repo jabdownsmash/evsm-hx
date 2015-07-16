@@ -26,7 +26,9 @@ class FState<T: (StateObject),U: (EventObject)>{
         return this;
     }
 
-    //FStates have 3 separate callback functions that are called at distinct times during the 
+    //FStates have 3 separate callback functions
+    //update is called whenever update() is called
+    //start and end are called when switching states
     public function setUpdate(func1:T->Void):FState<T,U>
     {
         setCallback(CB_UPDATE,func1);
