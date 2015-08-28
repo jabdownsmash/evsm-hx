@@ -22,7 +22,30 @@ class FState<T: (StateObject),U: (EventObject)>{
     //will transition to the one specified.
     public function addTransition(toState:FState<T,U>,eventID:String):FState<T,U>
     {
-        eventActions.set(eventID,toState);
+        eventActions.set(eventID,function(t:T,u:U){switchTo(t,toState,u);});
+        return this;
+    }
+
+    public function onEvent(eventID:String,?func1:T->Void,?func2:T->U->Void)
+    {
+        if(func1 == null && func2 == null)
+        {
+            trace("No argument given to set onEvent on state " + name);
+            return this;
+        }
+        if(func1 != null && func2 != null)
+        {
+            trace("Too many arguments given to set onEvent on state " + name);
+            return this;
+        }
+        if(func1 != null)
+        {
+            eventActions.set(eventID,function(t:T,u:U){func1(t);});
+        }
+        if(func2 != null)
+        {
+            eventActions.set(eventID,func2);
+        }
         return this;
     }
 
@@ -74,7 +97,8 @@ class FState<T: (StateObject),U: (EventObject)>{
     {
         if(eventActions.exists(event.id))
         {
-            switchTo(obj,eventActions.get(event.id),event);
+            // switchTo(obj,eventActions.get(event.id),event);
+            eventActions.get(event.id)(obj,event);
             return true;
         }
         for(parent in parents)
@@ -167,5 +191,5 @@ class FState<T: (StateObject),U: (EventObject)>{
     var parameters:ObjectMap<FState<T,U>,Array<Dynamic>> = new ObjectMap<FState<T,U>,Array<Dynamic>>();
     var currentParameterRef:ObjectMap<FState<T,U>,Array<Dynamic>>;
 
-    var eventActions:StringMap<FState<T,U>> = new StringMap<FState<T,U>>();
+    var eventActions:StringMap<T->U->Void> = new StringMap<T->U->Void>();
 }
