@@ -10,7 +10,7 @@ import haxe.ds.StringMap;
  
 class FState<T: (StateObject),U: (EventObject)>{
 
-    //The name is used for debugging purposes, and is not utilized within the class.
+    //The name is used for debugging/identification purposes, and is not utilized within the class.
     public var name:String;
 
     public function new(n:String = "Unnamed") 
@@ -22,7 +22,7 @@ class FState<T: (StateObject),U: (EventObject)>{
     //will transition to the one specified.
     public function addTransition(toState:FState<T,U>,eventID:String):FState<T,U>
     {
-        eventActions.set(eventID,function(t:T,u:U){switchTo(t,toState,u);});
+        transitions.set(eventID,toState);
         return this;
     }
 
@@ -93,12 +93,18 @@ class FState<T: (StateObject),U: (EventObject)>{
         toState.start(obj,event);
     }
 
+
+    //returns true if a transition occurred
+
     public function processEvent(obj:T,event:U):Bool
     {
         if(eventActions.exists(event.id))
         {
-            // switchTo(obj,eventActions.get(event.id),event);
             eventActions.get(event.id)(obj,event);
+        }
+        if(transitions.exists(event.id))
+        {
+            switchTo(obj,transitions.get(event.id),event);
             return true;
         }
         for(parent in parents)
@@ -192,4 +198,5 @@ class FState<T: (StateObject),U: (EventObject)>{
     var currentParameterRef:ObjectMap<FState<T,U>,Array<Dynamic>>;
 
     var eventActions:StringMap<T->U->Void> = new StringMap<T->U->Void>();
+    var transitions:StringMap<FState<T,U>> = new StringMap<FState<T,U>>();
 }
